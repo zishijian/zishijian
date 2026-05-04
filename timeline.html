@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>大圣宇宙 | 藏子世间</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --ink-black: #0a0908;
+            --ancient-gold: #c9a227;
+            --dark-red: #8b0000;
+            --bronze-light: #d4a84b;
+            --bronze-dark: #8b6914;
+        }
+        body { padding-top: 70px;
+            background: var(--ink-black);
+            font-family: 'Noto Serif SC', serif;
+            background-image: linear-gradient(rgba(10, 9, 8, 0.75), rgba(10, 9, 8, 0.7)), url('images/timeline_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+        }
+        h1, h2, h3 { font-family: 'ZCOOL XiaoWei', serif; }
+        
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(10,9,8,0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--ancient-gold);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .back-btn, .nav-link {
+            color: var(--ancient-gold);
+            font-family: 'ZCOOL XiaoWei', serif;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .back-btn { border-color: rgba(201, 162, 39, 0.4); }
+        .back-btn:hover, .nav-link:hover { color: var(--bronze-light); text-shadow: 0 0 10px rgba(201, 162, 39, 0.8); }
+        
+        .page-header {
+            text-align: center;
+            padding: 5rem 1rem 3rem;
+            border-bottom: 2px solid var(--ancient-gold);
+        }
+        .page-header h1 {
+            color: var(--ancient-gold);
+            font-size: 2.5rem;
+            text-shadow: 0 0 30px rgba(201, 162, 39, 0.6);
+        }
+        .page-header p { color: var(--bronze-light); font-size: 1.1rem; }
+        
+        .characters-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+        .section-title {
+            color: var(--ancient-gold);
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bronze-dark);
+        }
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        .character-card {
+            background: linear-gradient(145deg, rgba(20, 18, 15, 0.9), rgba(10, 9, 8, 0.95));
+            border: 2px solid var(--ancient-gold);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .character-card:hover {
+            box-shadow: 0 0 30px rgba(201, 162, 39, 0.4);
+            transform: translateY(-5px);
+        }
+        .char-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            border-bottom: 2px solid var(--ancient-gold);
+        }
+        .char-info { padding: 1.5rem; }
+        .char-name {
+            color: var(--ancient-gold);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(201, 162, 39, 0.5);
+        }
+        .char-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--dark-red), var(--bronze-dark));
+            border: 1px solid var(--ancient-gold);
+            color: var(--ancient-gold);
+            padding: 0.3rem 1rem;
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .char-desc { color: #d4c8b5; line-height: 1.8; margin-bottom: 0.8rem; }
+        .char-traits { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+        .trait-tag {
+            background: rgba(201, 162, 39, 0.15);
+            border: 1px solid var(--bronze-dark);
+            color: var(--bronze-light);
+            padding: 0.3rem 0.8rem;
+            font-size: 0.85rem;
+        }
+        
+        .timeline-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+        .timeline-line {
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--ancient-gold), var(--dark-red), var(--ancient-gold));
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem; top: 0;
+            width: 12px; height: 12px;
+            background: var(--ancient-gold);
+            border-radius: 50%;
+            transform: translateX(-4.5px);
+            box-shadow: 0 0 10px rgba(201, 162, 39, 0.6);
+        }
+        .timeline-year {
+            color: var(--ancient-gold);
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        .timeline-title { color: var(--bronze-light); font-size: 1.3rem; margin-bottom: 0.8rem; }
+        .timeline-content { color: #d4c8b5; line-height: 1.8; }
+        
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 2rem; }
+            .characters-grid { grid-template-columns: 1fr; }
+            .char-image { height: 220px; }
+            .top-nav { padding: 0.5rem 1rem; gap: 0.8rem; }
+            .nav-link { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+        }
+    </style>
+</head>
+<body style="padding-top:70px">
+    <nav class="top-nav">
+        <a href="index.html" class="back-btn">← 返回</a>
+        <a href="character-player.html" class="nav-link">命运主角</a>
+        <a href="enhanced-creator.html" class="nav-link">创造独立宇宙</a>
+    </nav>
+
+    <header class="page-header">
+        <h1>大圣宇宙</h1>
+        <p>诸天宇宙的命运流转 · 关键人物的传奇轨迹</p>
+    </header>
+
+    <main>
+        <section class="characters-section">
+            <h2 class="section-title">命运之轮 · 关键人物</h2>
+            <div class="characters-grid">
+                <div class="character-card">
+                    <img src="images/wukong_portrait_vertical.jpg" alt="孙悟空" class="char-image">
+                    <div class="char-info">
+                        <h3 class="char-name">孙悟空</h3>
+                        <span class="char-badge">齐天大圣 · 悟字辈</span>
+                        <p class="char-desc">花果山仙石孕育而生，天生灵慧。为求长生拜入菩提祖师门下，赐名"悟空"。大闹天宫后被压五行山五百年。</p>
+                        <p class="char-desc">在藏子世间，他挡在主角身前对抗漫天仙佛："师弟，你终于来了。"</p>
+                        <div class="char-traits">
+                            <span class="trait-tag">大圣一脉</span>
+                            <span class="trait-tag">命运节点</span>
+                            <span class="trait-tag">接引者</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="character-card">
+                    <img src="images/puti_portrait_vertical.jpg" alt="菩提老祖" class="char-image">
+                    <div class="char-info">
+                        <h3 class="char-name">菩提老祖</h3>
+                        <span class="char-badge">方寸之主 · 觉悟圆满</span>
+                        <p class="char-desc">方寸山斜月三星洞的主人，独立于三界之外，超脱于五行之中。超越时间的存在，见证无数宇宙的生灭。</p>
+                        <p class="char-desc">"你的觉，与我的觉，终将交汇于命运的终点。觉字机缘，非你莫属。"</p>
+                        <div class="char-traits">
+                            <span class="trait-tag">神秘导师</span>
+                            <span class="trait-tag">命运策划者</span>
+                            <span class="trait-tag">诸天万法</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- narrative moved to top -->
+
+
+        <!-- 互动叙事入口 -->
+        <section class="narrative-section" style="max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem;">
+            <h2 class="section-title">主宇宙 · 互动叙事</h2>
+            <div class="narrative-card" style="background: linear-gradient(145deg, rgba(45, 27, 78, 0.3), rgba(10, 9, 8, 0.95)); border: 2px solid #c9a227; overflow: hidden; border-radius: 8px;">
+                <img src="images/story/scene_0.jpg" alt="第一章封面" style="width: 100%; height: 300px; object-fit: cover;">
+                <div style="padding: 2rem;">
+                    <h3 style="color: #c9a227; font-size: 1.8rem; margin-bottom: 1rem; text-shadow: 0 0 10px rgba(201, 162, 39, 0.5);">第一章：封印之门</h3>
+                    <p style="color: #d4a84b; font-size: 1.1rem; margin-bottom: 1.5rem; line-height: 1.8;">
+                        你在一片混沌中醒来，眼前是一道刻满符文的石门。推开它，你将踏入灵台方寸山的修行之路——在这里，你的选择将决定命运的走向。
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="chapter1-narrative.html" style="background: linear-gradient(135deg, #8b0000, #5a0000); border: 2px solid #c9a227; color: #c9a227; padding: 1rem 2rem; font-family: 'ZCOOL XiaoWei', serif; text-decoration: none; transition: all 0.3s; font-size: 1.1rem; display: inline-block;">
+                            ▸ 开始探索
+                        </a>
+                        <span style="color: rgba(201, 162, 39, 0.6); align-self: center; font-size: 0.9rem;">约5-8分钟 · 多分支结局</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="timeline-section">
+            <h2 class="section-title">时空流转 · 命运轨迹</h2>
+            <div class="timeline-line">
+                <div class="timeline-item">
+                    <div class="timeline-year">太初</div>
+                    <h3 class="timeline-title">天地初开</h3>
+                    <p class="timeline-content">混沌如鸡子，鸿蒙初判。菩提老祖已存在于世外之地，独立于三界之外。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">远古</div>
+                    <h3 class="timeline-title">方寸山立宗</h3>
+                    <p class="timeline-content">菩提老祖创立斜月三星洞，门下辈分：广、大、智、慧、真、悟、如、圆、觉。洞中一日等于外界一年。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">上古</div>
+                    <h3 class="timeline-title">石猴出世</h3>
+                    <p class="timeline-content">花果山仙石孕育石猴，天生灵慧，成为美猴王。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">上古</div>
+                    <h3 class="timeline-title">拜师学艺</h3>
+                    <p class="timeline-content">石猴漂洋过海拜入菩提祖师门下，赐名"悟空"，列"悟"字辈。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">上古</div>
+                    <h3 class="timeline-title">大闹天宫</h3>
+                    <p class="timeline-content">悟空大闹龙宫地府，被封"齐天大圣"，后因蟠桃盛会再度反下天庭。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">五百年前</div>
+                    <h3 class="timeline-title">五行山下</h3>
+                    <p class="timeline-content">惊动如来佛祖，悟空被压五行山五百年。时间线开始改变。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">现在</div>
+                    <h3 class="timeline-title">觉字机缘</h3>
+                    <p class="timeline-content">主角穿越到藏子世间，成为"觉"字辈最后一人。孙悟空挡在身前："师弟，你终于来了。"</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">未来</div>
+                    <h3 class="timeline-title">诸天交汇</h3>
+                    <p class="timeline-content">无数世界正在融合，揭开藏子世间的终极秘密，一切都刚刚开始...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+<script src="js/i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>创造独立宇宙 | 藏子世间</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0d0d0d;
+            --bg-card: #1a1a1a;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --accent-glow: #a78bfa;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --border-subtle: rgba(255,255,255,0.08);
+            --border-accent: rgba(99,102,241,0.5);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { padding-top: 70px;
+            background: var(--bg-dark);
+            font-family: 'Noto Serif SC', serif;
+            min-height: 100vh;
+            color: var(--text-primary);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 背景图案层 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(99,102,241,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139,92,246,0.06) 0%, transparent 50%),
+                linear-gradient(90deg, transparent 49.5%, rgba(255,255,255,0.02) 49.5%, rgba(255,255,255,0.02) 50.5%, transparent 50.5%),
+                linear-gradient(0deg, transparent 49.5%, rgba(255,255,255,0.02) 49.5%, rgba(255,255,255,0.02) 50.5%, transparent 50.5%);
+            background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* 动态光效 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(99,102,241,0.03) 70%, transparent 100%);
+            animation: pulse-glow 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        /* 导航 */
+        .top-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            background: rgba(13,13,13,0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+        .back-btn, .nav-link {
+            color: var(--text-secondary);
+            font-family: 'ZCOOL XiaoWei', serif;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-subtle);
+            background: transparent;
+            cursor: pointer;
+            font-size: 1rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover, .nav-link:hover { 
+            color: var(--text-primary); 
+            border-color: var(--accent-primary);
+            background: rgba(99,102,241,0.1);
+        }
+        
+        /* Token显示 */
+        .token-display {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .token-count {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 0.4rem 1rem;
+            color: var(--text-primary);
+            font-family: 'ZCOOL XiaoWei', serif;
+            border-radius: 6px;
+        }
+        .buy-token-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            padding: 0.5rem 1.2rem;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'ZCOOL XiaoWei', serif;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+        .buy-token-btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99,102,241,0.4);
+        }
+        
+        /* 主容器 */
+        .creator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 5rem 1.5rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 页面标题 */
+        
+        .cosmos-intro-image {
+            display: none;
+        }
+        .cosmos-intro-image img {
+            display: none;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .page-title h1 {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+        .page-title p { 
+            color: var(--text-secondary); 
+            font-size: 1rem;
+        }
+        
+        /* 选择区域 */
+        .selection-section {
+            margin-bottom: 2rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .section-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+        .selection-count {
+            color: var(--accent-glow);
+            font-size: 0.85rem;
+        }
+        
+        /* 特质网格 */
+        .traits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 0.8rem;
+        }
+        .trait-item {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        .trait-item:hover {
+            border-color: var(--accent-primary);
+            background: rgba(99,102,241,0.08);
+            transform: translateY(-2px);
+        }
+        .trait-item.selected {
+            border-color: var(--accent-primary);
+            background: rgba(99,102,241,0.15);
+            box-shadow: 0 0 20px rgba(99,102,241,0.3);
+        }
+        .trait-item.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: var(--accent-glow);
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        .trait-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.3rem;
+        }
+        .trait-name {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        
+        /* 输入区域 */
+        .input-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .input-group label {
+            display: block;
+            color: var(--text-primary);
+            font-family: 'ZCOOL XiaoWei', serif;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .input-group input {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+        .input-group input::placeholder { color: var(--text-muted); }
+        
+        /* API设置 */
+        .api-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .api-toggle {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .api-option {
+            flex: 1;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .api-option.active {
+            border-color: var(--accent-primary);
+            background: rgba(99,102,241,0.1);
+        }
+        .api-option-title {
+            color: var(--text-primary);
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .api-option-desc {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .api-key-input {
+            display: none;
+        }
+        .api-key-input.show {
+            display: block;
+            margin-top: 1rem;
+        }
+        .api-key-input input {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+        .api-key-input input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+        
+        /* 生成按钮 */
+        .generate-section {
+            text-align: center;
+        }
+        .generate-btn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border: none;
+            color: white;
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.3rem;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+        }
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* 结果展示 */
+        .result-section {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-primary);
+            border-radius: 12px;
+            text-align: center;
+        }
+        .result-section.show { display: block; }
+        .result-title {
+            font-family: 'ZCOOL XiaoWei', serif;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        .result-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            text-align: left;
+            padding: 1rem;
+            background: var(--bg-dark);
+            border-radius: 8px;
+        }
+        
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .top-nav { padding: 0.5rem 1rem; }
+            .nav-left { gap: 0.8rem; }
+            .nav-link { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+            .token-display { flex-direction: column; gap: 0.5rem; }
+            .page-title h1 { font-size: 1.8rem; }
+            .traits-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+            .trait-icon { font-size: 1.5rem; }
+            .trait-name { font-size: 0.6rem; }
+            .api-toggle { flex-direction: column; }
+            .generate-btn { font-size: 1.1rem; padding: 0.8rem 2rem; }
+        }
+    </style>
+</head>
+<body style="padding-top:70px">
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">← 返回</a>
+            <a href="character-player.html" class="nav-link">命运主角</a>
+            <a href="timeline.html" class="nav-link">世界时间线</a>
+        </div>
+        <div class="token-display">
+            <span class="token-count">∞ Token</span>
+            <button class="buy-token-btn" onclick="showTokenModal()">购买Token</button>
+        </div>
+    </nav>
+
+    <div class="creator-container">
+        <div class="page-title">
+            <h1 data-i18n="createUniversePage">创造独立宇宙</h1>
+            <p data-i18n="chooseTraits">选择特质，定义你的宇宙法则</p>
+        </div>
+
+        <!-- 宇宙名称 -->
+        <div class="input-section">
+            <div class="input-row">
+                <div class="input-group">
+                    <label data-i18n="universeName">宇宙名称</label>
+                    <input type="text" id="universe-name" placeholder="为你的宇宙命名...">
+                </div>
+                <div class="input-group">
+                    <label data-i18n="yourIdentity">你的身份</label>
+                    <input type="text" id="user-identity" placeholder="穿越者、觉醒者、轮回者..." data-i18n="identityPlaceholder2">
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心法则 -->
+        <div class="selection-section">
+            <div class="section-header">
+                <span class="section-title" data-i18n="coreLaw">核心法则</span>
+                <span class="selection-count" data-i18n="selectOne">选择1项</span>
+            </div>
+            <div class="traits-grid" id="law-grid">
+                <div class="trait-item" data-value="修仙" data-category="law">
+                    <span class="trait-icon">⚔️</span>
+                    <span class="trait-name" data-i18n="cultivationPath">修仙问道</span>
+                </div>
+                <div class="trait-item" data-value="魔法" data-category="law">
+                    <span class="trait-icon">🔮</span>
+                    <span class="trait-name" data-i18n="magicWorld">魔法世界</span>
+                </div>
+                <div class="trait-item" data-value="科技" data-category="law">
+                    <span class="trait-icon">🚀</span>
+                    <span class="trait-name" data-i18n="techCivilization">科技文明</span>
+                </div>
+                <div class="trait-item" data-value="混沌" data-category="law">
+                    <span class="trait-icon">🌀</span>
+                    <span class="trait-name" data-i18n="chaosPrimordial">混沌原初</span>
+                </div>
+                <div class="trait-item" data-value="武道" data-category="law">
+                    <span class="trait-icon">👊</span>
+                    <span class="trait-name" data-i18n="martialSupreme">武道至尊</span>
+                </div>
+                <div class="trait-item" data-value="灵异" data-category="law">
+                    <span class="trait-icon">👻</span>
+                    <span class="trait-name" data-i18n="supernaturalMystery">灵异诡秘</span>
+                </div>
+                <div class="trait-item" data-value="末世" data-category="law">
+                    <span class="trait-icon">☢️</span>
+                    <span class="trait-name" data-i18n="postApocalyptic">末世废土</span>
+                </div>
+                <div class="trait-item" data-value="星际" data-category="law">
+                    <span class="trait-icon">🌌</span>
+                    <span class="trait-name" data-i18n="starVoyage">星际征途</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 天赋能力 -->
+        <div class="selection-section">
+            <div class="section-header">
+                <span class="section-title" data-i18n="talentAbility">天赋能力</span>
+                <span class="selection-count" data-i18n="selectThree">选择3项</span>
+            </div>
+            <div class="traits-grid" id="ability-grid">
+                <div class="trait-item" data-value="预知" data-category="ability">
+                    <span class="trait-icon">👁️</span>
+                    <span class="trait-name" data-i18n="foreseeFuture">预知未来</span>
+                </div>
+                <div class="trait-item" data-value="穿越" data-category="ability">
+                    <span class="trait-icon">🌀</span>
+                    <span class="trait-name" data-i18n="timeTravel">时空穿越</span>
+                </div>
+                <div class="trait-item" data-value="不死" data-category="ability">
+                    <span class="trait-icon">💀</span>
+                    <span class="trait-name">不死之身</span>
+                </div>
+                <div class="trait-item" data-value="读心" data-category="ability">
+                    <span class="trait-icon">🧠</span>
+                    <span class="trait-name">读心术</span>
+                </div>
+                <div class="trait-item" data-value="召唤" data-category="ability">
+                    <span class="trait-icon">⚡</span>
+                    <span class="trait-name">召唤术</span>
+                </div>
+                <div class="trait-item" data-value="炼丹" data-category="ability">
+                    <span class="trait-icon">🧪</span>
+                    <span class="trait-name">炼丹术</span>
+                </div>
+                <div class="trait-item" data-value="御兽" data-category="ability">
+                    <span class="trait-icon">🐉</span>
+                    <span class="trait-name">御兽术</span>
+                </div>
+                <div class="trait-item" data-value="隐身" data-category="ability">
+                    <span class="trait-icon">👤</span>
+                    <span class="trait-name">隐身术</span>
+                </div>
+                <div class="trait-item" data-value="治愈" data-category="ability">
+                    <span class="trait-icon">💚</span>
+                    <span class="trait-name">治愈术</span>
+                </div>
+                <div class="trait-item" data-value="强化" data-category="ability">
+                    <span class="trait-icon">💪</span>
+                    <span class="trait-name">超级强化</span>
+                </div>
+                <div class="trait-item" data-value="元素" data-category="ability">
+                    <span class="trait-icon">🔥</span>
+                    <span class="trait-name">元素掌控</span>
+                </div>
+                <div class="trait-item" data-value="幻术" data-category="ability">
+                    <span class="trait-icon">✨</span>
+                    <span class="trait-name">幻术大师</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 性格特质 -->
+        <div class="selection-section">
+            <div class="section-header">
+                <span class="section-title" data-i18n="personalityTrait">性格特质</span>
+                <span class="selection-count" data-i18n="selectTwo">选择2项</span>
+            </div>
+            <div class="traits-grid" id="personality-grid">
+                <div class="trait-item" data-value="冷静" data-category="personality">
+                    <span class="trait-icon">❄️</span>
+                    <span class="trait-name">冷静理智</span>
+                </div>
+                <div class="trait-item" data-value="热血" data-category="personality">
+                    <span class="trait-icon">🔥</span>
+                    <span class="trait-name">热血冲动</span>
+                </div>
+                <div class="trait-item" data-value="腹黑" data-category="personality">
+                    <span class="trait-icon">🎭</span>
+                    <span class="trait-name">城府深沉</span>
+                </div>
+                <div class="trait-item" data-value="善良" data-category="personality">
+                    <span class="trait-icon">💝</span>
+                    <span class="trait-name">善良仁慈</span>
+                </div>
+                <div class="trait-item" data-value="孤傲" data-category="personality">
+                    <span class="trait-icon">👑</span>
+                    <span class="trait-name">孤傲冷峻</span>
+                </div>
+                <div class="trait-item" data-value="幽默" data-category="personality">
+                    <span class="trait-icon">😄</span>
+                    <span class="trait-name">幽默风趣</span>
+                </div>
+                <div class="trait-item" data-value="谨慎" data-category="personality">
+                    <span class="trait-icon">🛡️</span>
+                    <span class="trait-name">谨慎小心</span>
+                </div>
+                <div class="trait-item" data-value="野心" data-category="personality">
+                    <span class="trait-icon">🎯</span>
+                    <span class="trait-name">野心勃勃</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- API设置 -->
+        <div class="api-section">
+            <div class="api-toggle">
+                <div class="api-option active" data-api="built-in" onclick="selectApi('built-in')">
+                    <div class="api-option-title" data-i18n="useBuiltIn">使用内置Token</div>
+                    <div class="api-option-desc" data-i18n="consumeSiteToken">消耗网站Token生成</div>
+                </div>
+                <div class="api-option" data-api="custom" onclick="selectApi('custom')">
+                    <div class="api-option-title" data-i18n="useYourAPI">使用自己的API</div>
+                    <div class="api-option-desc" data-i18n="accessMiMo">接入MiMo/OpenAI等</div>
+                </div>
+            </div>
+            <div class="api-key-input" id="api-key-section">
+                <input type="text" id="api-key" placeholder="输入你的API Key...">
+            </div>
+        </div>
+
+        <!-- 生成按钮 -->
+        <div class="generate-section">
+            <button class="generate-btn" data-i18n="generateUniverse" onclick="generateUniverse()">
+                ✨ 生成你的宇宙 ✨
+            </button>
+        </div>
+
+        <!-- 结果展示 -->
+        <div class="result-section" id="result-section">
+            <h2 class="result-title" data-i18n="universeBorn">你的宇宙已诞生</h2>
+            <div class="result-content" id="result-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // 选择逻辑
+        const selections = {
+            law: { max: 1, selected: [] },
+            ability: { max: 3, selected: [] },
+            personality: { max: 2, selected: [] }
+        };
+        
+        document.querySelectorAll('.trait-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const category = this.dataset.category;
+                const value = this.dataset.value;
+                const config = selections[category];
+                
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    config.selected = config.selected.filter(v => v !== value);
+                } else {
+                    if (config.selected.length < config.max) {
+                        this.classList.add('selected');
+                        config.selected.push(value);
+                    }
+                }
+                
+                updateCountDisplay(category);
+            });
+        });
+        
+        function updateCountDisplay(category) {
+            const config = selections[category];
+            const section = document.querySelector(`#${category}-grid`).closest('.selection-section');
+            section.querySelector('.selection-count').textContent = 
+                `已选${config.selected.length}/${config.max}项`;
+        }
+        
+        // API选择
+        function selectApi(type) {
+            document.querySelectorAll('.api-option').forEach(opt => opt.classList.remove('active'));
+            document.querySelector(`[data-api="${type}"]`).classList.add('active');
+            document.getElementById('api-key-section').classList.toggle('show', type === 'custom');
+        }
+        
+        // 生成宇宙
+        async function generateUniverse() {
+            const name = document.getElementById('universe-name').value || '无名宇宙';
+            const identity = document.getElementById('user-identity').value || '神秘来客';
+            const law = selections.law.selected[0] || '混沌';
+            const abilities = selections.ability.selected;
+            const personalities = selections.personality.selected;
+            
+            const useCustomApi = document.querySelector('.api-option[data-api="custom"]').classList.contains('active');
+            const apiKey = document.getElementById('api-key').value;
+            
+            const btn = document.querySelector('.generate-btn');
+            btn.disabled = true;
+            btn.textContent = '生成中...';
+            
+            // 构建prompt
+            const prompt = `创建一个名为"${name}"的独立宇宙。
+宇宙法则：${law}
+创造者身份：${identity}
+天赋能力：${abilities.join('、') || '无'}
+性格特质：${personalities.join('、') || '无'}
+
+请生成这个宇宙的详细描述，包括：
+1. 宇宙起源与法则
+2. 世界观设定
+3. 创造者的命运轨迹
+4. 主要势力与冲突
+5. 特殊事件与机缘
+
+用黑神话：悟空风格的暗黑东方美学描述，富有诗意和神秘感。`;
+            
+            try {
+                let result;
+                if (useCustomApi && apiKey) {
+                    result = await callCustomApi(apiKey, prompt);
+                } else {
+                    result = await callBuiltInApi(prompt);
+                }
+                
+                document.getElementById('result-content').innerHTML = result.replace(/\n/g, '<br>');
+                document.getElementById('result-section').classList.add('show');
+            } catch (error) {
+                alert('生成失败：' + error.message);
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = '✨ 生成你的宇宙 ✨';
+        }
+        
+        async function callBuiltInApi(prompt) {
+            // 调用内置MiMo API
+            const response = await fetch('https://api.xiaomimimo.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-s18h58soo623moxu394hwxo8yzr7hsfdy2hujasa3negiqd0'
+                },
+                body: JSON.stringify({
+                    model: 'mimo-v2-flash',
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: 0.8
+                })
+            });
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+        
+        async function callCustomApi(apiKey, prompt) {
+            // 使用用户提供的API
+            const response = await fetch('https://api.xiaomimimo.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'mimo-v2-flash',
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: 0.8
+                })
+            });
+            
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+        
+        function showTokenModal() {
+            alert('Token购买功能开发中...\n目前可免费使用！');
+        }
+    </script>
+<script src="js/i18n.js"></script>
+</body>
+</html>

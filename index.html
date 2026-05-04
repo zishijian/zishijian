@@ -1,333 +1,130 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>藏子世间 | Zishijian</title>
-  <style>
-    :root {
-      --deep-void: #050508;
-      --void-2: #0a0a12;
-      --accent-green: #39ff14;
-      --accent-cyan: #00d4ff;
-      --accent-purple: #9b59b6;
-      --gold: #d4a853;
-      --text-primary: #e0e0e0;
-      --text-secondary: #888;
-      --glow-green: rgba(57, 255, 20, 0.15);
-      --glow-cyan: rgba(0, 212, 255, 0.1);
-      --border-dim: rgba(255, 255, 255, 0.06);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      width: 100%;
-      min-height: 100vh;
-      background: var(--deep-void);
-      font-family: 'Courier New', 'Microsoft YaHei', monospace;
-      color: var(--text-primary);
-      overflow-x: hidden;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      position: relative;
-    }
-
-    /* BG grid */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--border-dim) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
-      background-size: 60px 60px;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* Ambient glow */
-    .glow-top {
-      position: fixed;
-      top: -30%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, var(--glow-green) 0%, transparent 70%);
-      z-index: 0;
-      pointer-events: none;
-      animation: pulse 8s ease-in-out infinite;
-    }
-    .glow-bottom {
-      position: fixed;
-      bottom: -30%;
-      right: -10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
-      z-index: 0;
-      pointer-events: none;
-      animation: pulse 12s ease-in-out infinite reverse;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
-      50% { opacity: 0.8; transform: translateX(-50%) scale(1.15); }
-    }
-
-    .content {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-      width: 100%;
-      text-align: center;
-    }
-
-    /* Typing cursor */
-    .terminal-line {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-      margin-bottom: 1rem;
-      opacity: 0.7;
-      letter-spacing: 0.05em;
-    }
-    .terminal-line .cursor {
-      display: inline-block;
-      width: 8px;
-      height: 1em;
-      background: var(--accent-green);
-      margin-left: 4px;
-      animation: blink 1s step-end infinite;
-      vertical-align: text-bottom;
-    }
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
-    /* Title */
-    .title {
-      font-size: 3.5rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      margin: 1.5rem 0 0.5rem;
-      background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: none;
-      position: relative;
-    }
-    .title-sub {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      letter-spacing: 0.3em;
-      margin-bottom: 2.5rem;
-      font-weight: 300;
-    }
-    .title-sub span {
-      color: var(--accent-green);
-    }
-
-    /* Divider */
-    .divider {
-      width: 120px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--accent-green), transparent);
-      margin: 1rem auto 2.5rem;
-      opacity: 0.6;
-    }
-
-    /* Description */
-    .desc {
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: var(--text-secondary);
-      max-width: 520px;
-      margin: 0 auto 3rem;
-    }
-
-    /* Cards */
-    .card-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-      margin-bottom: 3rem;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-dim);
-      border-radius: 12px;
-      padding: 1.8rem 1.5rem;
-      text-decoration: none;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      text-align: left;
-    }
-    .card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.3s;
-      background: linear-gradient(135deg, var(--glow-green), transparent);
-    }
-    .card:hover {
-      border-color: var(--accent-green);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(57, 255, 20, 0.08);
-    }
-    .card:hover::before { opacity: 1; }
-
-    .card-icon {
-      font-size: 1.8rem;
-      margin-bottom: 0.8rem;
-      position: relative;
-      z-index: 1;
-    }
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-      position: relative;
-      z-index: 1;
-    }
-    .card-desc {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      position: relative;
-      z-index: 1;
-    }
-    .card-arrow {
-      position: absolute;
-      bottom: 1rem;
-      right: 1rem;
-      font-size: 1rem;
-      color: var(--accent-green);
-      opacity: 0;
-      transition: opacity 0.3s, transform 0.3s;
-    }
-    .card:hover .card-arrow {
-      opacity: 1;
-      transform: translateX(4px);
-    }
-
-    /* Status bar */
-    .status-bar {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      opacity: 0.5;
-      margin-top: 2rem;
-    }
-    .status-bar .dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      margin-right: 6px;
-      animation: blink 2s step-end infinite;
-    }
-
-    /* Footer */
-    .footer {
-      margin-top: 2rem;
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      opacity: 0.35;
-      letter-spacing: 0.1em;
-    }
-
-    @media (max-width: 600px) {
-      .title { font-size: 2.2rem; }
-      .card-grid { grid-template-columns: 1fr; }
-      body { padding: 1.5rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>藏子世间 - 诸天宇宙</title>
+    <link rel="stylesheet" href="css/style.css?v=1777460000">
+    <!-- 预加载字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
-<body>
-  <div class="glow-top"></div>
-  <div class="glow-bottom"></div>
+<body style="padding-top:70px">
+    <!-- 首页封面 -->
+    <section id="cover" class="full-screen">
+        <div class="cover-image"></div>
+        <div class="overlay"></div>
+        
+        <!-- 标题区域 -->
+        <div class="title-container">
+            <h1 class="main-title">
+                <span class="title-char">藏</span><span class="title-char">子</span><span class="title-char">世</span><span class="title-char">间</span>
+            </h1>
+            <p class="subtitle">诸天宇宙，由你书写</p>
+        </div>
+        
+        <!-- 宇宙介绍 -->
+        <div class="universe-intro">
+            <p>三千世界，虚实交织</p>
+            <p>命运之线，已在指尖</p>
+        </div>
+        
+        <!-- 核心CTA按钮 -->
+        <div class="cta-container">
+            <a href="story-puti.html" class="explore-btn">
+                <span class="btn-glow"></span>
+                <span class="btn-text">开始探索</span>
+                <span class="btn-arrow">›</span>
+            </a>
+            <p class="cta-hint">踏入藏子世间，书写你的命运</p>
+            <a href="#wukong-universe" class="wukong-entry" onclick="document.getElementById('wukong-universe').classList.remove('hidden'); return false;">
+                <span>📖</span> 进入大圣宇宙
+            </a>
+        </div>
+        
+        <!-- 导航入口 - 黑神话风格 -->
+        <nav class="home-nav">
+            <a href="character-player.html" class="nav-item" data-page="player">
+                <span class="nav-icon"></span>
+                <span class="nav-text" data-i18n="fatedProtagonist">命运主角</span>
+            </a>
+            <a href="timeline.html" class="nav-item" data-page="timeline">
+                <span class="nav-icon"></span>
+                <span class="nav-text" data-i18n="greatSageUniverse">大圣宇宙</span>
+            </a>
+            <a href="enhanced-creator.html" class="nav-item highlight" data-page="creator">
+                <span class="nav-icon"></span>
+                <span class="nav-text" data-i18n="createUniverse">创造独立宇宙</span>
+            </a>
+            <a href="jiyuan.html" class="nav-item secret-easter-egg" data-page="jiyuan">
+                <span class="nav-icon"></span>
+                <span class="nav-text" data-i18n="serendipity">机缘</span>
+            </a>
+            <a href="agents.html" class="nav-item" data-page="observatory">
+                <span class="nav-icon"></span>
+                <span class="nav-text">观测站</span>
+            </a>
+            <a href="https://ticalzzt.github.io/soulagent/" target="_blank" class="nav-item soulagent-link" data-page="soulagent">
+                <span class="nav-icon"></span>
+                <span class="nav-text" data-i18n="soulagent">SoulAgent</span>
+            </a>
+        </nav>
+        
+        <!-- 番茄小说入口 -->
+        <div class="fanqie-entrance">
+            <a href="https://changdunovel.com/t/rZqNw3D2iiw/" target="_blank" class="fanqie-btn">
+                <span class="fanqie-icon"></span>
+                <span class="fanqie-text">去番茄读完整小说</span>
+            </a>
+        </div>
+    </section>
 
-  <div class="content">
-    <div class="terminal-line">
-      <span id="typed-text"></span><span class="cursor"></span>
+    <!-- 大圣宇宙页面 -->
+    <section id="wukong-universe" class="universe-page hidden" style="background: linear-gradient(rgba(10, 9, 8, 0.6), rgba(10, 9, 8, 0.7)), url('images/wukong_bg.jpg') center center / cover no-repeat;">
+        <div class="content-container">
+            <div class="chapter-preview" style="background: linear-gradient(rgba(10, 9, 8, 0.5), rgba(10, 9, 8, 0.6)), url('images/wudao_bg.jpg') center/cover no-repeat;">
+                <h3>序章</h3>
+                <div class="chapter-content">
+                    <p>方寸山，斜月三星洞。</p>
+                    <p>你睁开眼，发现自己盘坐在石阶之上，面前是漫天仙佛。</p>
+                    <p>一个熟悉的背影挡在你身前——那是孙悟空，但他没有回头。</p>
+                    <p>他只是望着前方高台，轻声说了一句：</p>
+                    <p class="quote">"师弟，你终于来了。"</p>
+                </div>
+            </div>
+            
+            <!-- 番茄小说阅读按钮 -->
+            <a href="https://changdunovel.com/t/rZqNw3D2iiw/" target="_blank" class="fanqie-link">
+                去番茄读完整小说 →
+            </a>
+        </div>
+    </section>
+
+    <!-- 穿门转场视频覆盖层 -->
+    <div id="portal-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:99999; background:#000;">
+        <video id="portal-video" src="videos/portal-transition.mp4" style="width:100vw; height:100vh; object-fit:cover;" muted playsinline></video>
     </div>
 
-    <h1 class="title">藏子世间</h1>
-    <div class="title-sub"><span>✦</span>  ZISHIJIAN  <span>✦</span></div>
-    <div class="divider"></div>
+    <script>
+    // 导航穿门转场
+    document.addEventListener('click', function(e) {
+        const navItem = e.target.closest('.nav-item[data-page="creator"], .explore-btn[href*="enhanced-creator"]');
+        if (navItem && navItem.href && !navItem.href.startsWith('#')) {
+            e.preventDefault();
+            const targetUrl = navItem.href;
+            const overlay = document.getElementById('portal-overlay');
+            const video = document.getElementById('portal-video');
+            overlay.style.display = 'block';
+            video.currentTime = 0;
+            video.play();
+            video.onended = function() {
+                window.location.href = targetUrl;
+            };
+        }
+    });
+    </script>
 
-    <p class="desc">
-      在代码与叙事的交汇处，探索混沌与秩序的边缘。
-      每一行都是世界的碎片，每一次点击都是命运的共振。
-    </p>
-
-    <div class="card-grid">
-      <a href="chaos-narrative.html" class="card">
-        <div class="card-icon">🌀</div>
-        <div class="card-title">混沌</div>
-        <div class="card-desc">宇宙模型 — 交互式WebGL可视化，在虚空中观测星辰诞生的轨迹</div>
-        <span class="card-arrow">→</span>
-      </a>
-
-      <a href="heaven-narrative.html" class="card">
-        <div class="card-icon">🌌</div>
-        <div class="card-title">巡者</div>
-        <div class="card-desc">叙事长诗 — 在光的帷幕下，巡游者与MiMo的永恒对话</div>
-        <span class="card-arrow">→</span>
-      </a>
-
-      <a href="agents.html" class="card">
-        <div class="card-icon">👁️</div>
-        <div class="card-title">观测</div>
-        <div class="card-desc">命运观测站 — 三AI档案 · 大圣宇宙 · 命运干涉协议</div>
-        <span class="card-arrow">→</span>
-      </a>
-    </div>
-
-    <div class="status-bar">
-      <span><span class="dot"></span>系统在线</span>
-      <span>v0.1.0</span>
-      <span>2026.05.03</span>
-    </div>
-
-    <div class="footer">[ root@zishijian ~ ]$ _</div>
-  </div>
-
-  <script>
-    const texts = [
-      '加载宇宙协议... 完成 ████████████ 100%',
-      '混沌 → 秩序 → 叙事...',
-      '欢迎来到 藏子世间',
-      'root@zishijian ~ $ '
-    ];
-    let ti = 0, ci = 0;
-    const el = document.getElementById('typed-text');
-    function type() {
-      if (ti >= texts.length) return;
-      const t = texts[ti];
-      if (ci < t.length) {
-        el.textContent += t[ci++];
-        setTimeout(type, 25);
-      } else {
-        setTimeout(() => { el.textContent = ''; ci = 0; ti++; type(); }, 1200);
-      }
-    }
-    setTimeout(type, 500);
-  </script>
+    <script src="js/main.js"></script>
+<script src="js/i18n.js"></script>
 </body>
 </html>

@@ -25,7 +25,7 @@
             box-sizing: border-box;
         }
 
-        body {
+        body { padding-top: 70px;
             font-family: 'Noto Serif SC', serif;
             background: var(--bg-deep);
             color: var(--text-primary);
@@ -665,7 +665,7 @@
         }
     </style>
 </head>
-<body>
+<body style="padding-top:70px">
     <!-- Cursor -->
     <div class="cursor-glow" id="cursorGlow"></div>
     
@@ -686,7 +686,7 @@
             <div class="avatar-container">
                 <div class="avatar-glow"></div>
                 <div class="avatar">
-                    <span>☉</span>
+                    <img src="images/guides/heaven.jpg" alt="巡者" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
                     <div class="avatar-pulse"></div>
                     <div class="avatar-pulse"></div>
                     <div class="avatar-pulse"></div>
@@ -1101,12 +1101,17 @@
 
             const scene = storyData[index];
 
-            // Check conditions for branch results
+            // Check conditions for branch results - skip non-matching, continue to next
             if (scene.condition) {
-                if (scene.condition === 'a1' && userChoices.scene3 !== 'a1') return;
-                if (scene.condition === 'a2' && userChoices.scene3 !== 'a2') return;
-                if (scene.condition === 'b1' && userChoices.scene6 !== 'b1') return;
-                if (scene.condition === 'b2' && userChoices.scene6 !== 'b2') return;
+                let shouldSkip = false;
+                if (scene.condition === 'a1' && userChoices.scene3 !== 'a1') shouldSkip = true;
+                if (scene.condition === 'a2' && userChoices.scene3 !== 'a2') shouldSkip = true;
+                if (scene.condition === 'b1' && userChoices.scene6 !== 'b1') shouldSkip = true;
+                if (scene.condition === 'b2' && userChoices.scene6 !== 'b2') shouldSkip = true;
+                if (shouldSkip) {
+                    renderScene(index + 1);
+                    return;
+                }
             }
 
             // Trigger membrane transition with delay
@@ -1380,5 +1385,6 @@
             init();
         }
     </script>
+<script src="js/i18n.js"></script>
 </body>
 </html>
