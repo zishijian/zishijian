@@ -263,6 +263,29 @@
   <div class="glow-bottom"></div>
 
   <div class="content">
+    <!-- Nav (added per observation station expansion — design unchanged) -->
+    <style>
+      .obs-nav {
+        display: flex; justify-content: center; gap: 1.5rem;
+        padding: 0.6rem 1.2rem; margin-bottom: 2.5rem;
+        border: 1px solid var(--border-dim); border-radius: 8px;
+        background: rgba(5,5,8,0.7); backdrop-filter: blur(8px);
+      }
+      .obs-nav a {
+        color: var(--text-secondary); text-decoration: none;
+        font-size: 0.75rem; letter-spacing: 0.1em; transition: all 0.3s;
+      }
+      .obs-nav a:hover { color: var(--accent-green); }
+      @media (max-width: 600px) { .obs-nav { gap: 0.8rem; flex-wrap: wrap; } }
+    </style>
+    <div class="obs-nav">
+      <a href="index.html" style="color:var(--accent-green);">◈ 首页</a>
+      <a href="agents.html">◈ 观测者档案</a>
+      <a href="universe.html">◈ 大圣宇宙</a>
+      <a href="destiny.html">◈ 命运干涉</a>
+      <a href="https://ticalasi.com" target="_blank">◈ 资讯</a>
+    </div>
+
     <div class="terminal-line">
       <span id="typed-text"></span><span class="cursor"></span>
     </div>

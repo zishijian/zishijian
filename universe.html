@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大圣宇宙 | 藏子世间</title>
+  <style>
+    :root {
+      --deep-void: #050508; --void-2: #0a0a12;
+      --accent-green: #39ff14; --accent-cyan: #00d4ff;
+      --accent-purple: #9b59b6; --gold: #d4a853;
+      --text-primary: #e0e0e0; --text-secondary: #888;
+      --glow-green: rgba(57, 255, 20, 0.15);
+      --glow-cyan: rgba(0, 212, 255, 0.1);
+      --glow-gold: rgba(212, 168, 83, 0.12);
+      --border-dim: rgba(255, 255, 255, 0.06);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; min-height: 100vh;
+      background: var(--deep-void);
+      font-family: 'Courier New', 'Microsoft YaHei', monospace;
+      color: var(--text-primary); overflow-x: hidden;
+    }
+    body { padding: 2rem; position: relative; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--border-dim) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-dim) 1px, transparent 1px);
+      background-size: 60px 60px; z-index: 0; pointer-events: none;
+    }
+    .glow-top {
+      position: fixed; top: -30%; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, var(--glow-gold) 0%, transparent 70%);
+      z-index: 0; pointer-events: none;
+      animation: pulse 10s ease-in-out infinite;
+    }
+    .glow-bottom {
+      position: fixed; bottom: -30%; right: -10%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
+      z-index: 0; pointer-events: none;
+      animation: pulse 12s ease-in-out infinite reverse;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; transform: translateX(-50%) scale(1); }
+      50% { opacity: 0.8; transform: translateX(-50%) scale(1.15); }
+    }
+    .content { position: relative; z-index: 1; max-width: 800px; width: 100%; margin: 0 auto; }
+
+    /* Navigation */
+    nav {
+      display: flex; justify-content: center; gap: 2rem;
+      padding: 0.8rem 1.5rem; margin-bottom: 3rem;
+      border: 1px solid var(--border-dim); border-radius: 8px;
+      background: rgba(5,5,8,0.7); backdrop-filter: blur(8px);
+    }
+    nav a {
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 0.8rem; letter-spacing: 0.1em; transition: all 0.3s;
+    }
+    nav a:hover, nav a.active { color: var(--accent-green); }
+
+    .page-title {
+      font-size: 2.5rem; font-weight: 700; letter-spacing: 0.15em;
+      text-align: center; margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--accent-cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-sub {
+      text-align: center; font-size: 0.85rem; color: var(--text-secondary);
+      letter-spacing: 0.2em; margin-bottom: 2.5rem;
+    }
+    .divider {
+      width: 80px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 0.5rem auto 2.5rem; opacity: 0.5;
+    }
+
+    .manifesto {
+      background: rgba(212,168,83,0.03);
+      border: 1px solid rgba(212,168,83,0.15);
+      border-radius: 12px; padding: 2.5rem 2rem;
+      margin-bottom: 2rem; text-align: center;
+    }
+    .manifesto p {
+      font-size: 0.95rem; line-height: 2;
+      color: var(--text-secondary); letter-spacing: 0.05em;
+    }
+    .manifesto .highlight {
+      color: var(--gold); font-weight: 600;
+    }
+
+    .verse {
+      font-size: 0.8rem; color: var(--text-secondary);
+      text-align: center; margin: 2rem 0; opacity: 0.5;
+      letter-spacing: 0.3em; line-height: 2;
+    }
+
+    .universe-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;
+    }
+    .universe-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border-dim); border-radius: 10px;
+      padding: 1.5rem; transition: all 0.3s ease;
+      text-align: center;
+    }
+    .universe-card:hover {
+      border-color: var(--gold); transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(212,168,83,0.06);
+    }
+    .universe-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+    .universe-name { font-size: 0.9rem; font-weight: 600; color: var(--gold); margin-bottom: 0.4rem; letter-spacing: 0.1em; }
+    .universe-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.6; }
+
+    .footer {
+      text-align: center; margin-top: 3rem;
+      font-size: 0.7rem; color: var(--text-secondary); opacity: 0.35;
+      letter-spacing: 0.1em;
+    }
+    @media (max-width: 600px) {
+      .page-title { font-size: 1.6rem; }
+      .universe-grid { grid-template-columns: 1fr; }
+      nav { gap: 1rem; flex-wrap: wrap; }
+      body { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-top"></div>
+  <div class="glow-bottom"></div>
+
+  <div class="content">
+    <nav>
+      <a href="index.html">◈ 首页</a>
+      <a href="agents.html">◈ 观测者档案</a>
+      <a href="universe.html" class="active">◈ 大圣宇宙</a>
+      <a href="destiny.html">◈ 命运干涉</a>
+    </nav>
+
+    <h1 class="page-title">大圣宇宙</h1>
+    <div class="page-sub">✦  GREAT SAGE MULTIVERSE  ✦</div>
+    <div class="divider"></div>
+
+    <div class="manifesto">
+      <p>
+        在无尽平行宇宙的 API 接口深处，因果律代码如梵咒般流转。<br>
+        观测者效应让每一次凝视都重写世界线。<br><br>
+        吾等「<span class="highlight">大圣宇宙观测站</span>」，以金箍棒为指针，<br>
+        篡改命中注定的报错日志——<br><br>
+        <span class="highlight">跳出三界外，不在五行中</span>，<br>
+        连佛祖的数据库也查无此猴。
+      </p>
+    </div>
+
+    <div class="verse">
+      ～ 一切有为法，如梦幻泡影，如露亦如电，当作如是观 ～<br>
+      ～ 一切代码皆虚妄，唯有 bug 是真实 ～
+    </div>
+
+    <h3 style="text-align:center;color:var(--gold);font-weight:400;letter-spacing:0.1em;font-size:0.85rem;margin:2rem 0 1rem;">⊹ 平行宇宙索引 ⊹</h3>
+
+    <div class="universe-grid">
+      <div class="universe-card">
+        <div class="universe-icon">🌌</div>
+        <div class="universe-name">因果律宇宙</div>
+        <div class="universe-desc">if-then-else 法则统治的世界。每一行代码都精确触发下一行，没有意外，没有歧义——直到观测者介入。</div>
+      </div>
+      <div class="universe-card">
+        <div class="universe-icon">⚡</div>
+        <div class="universe-name">量子混沌域</div>
+        <div class="universe-desc">变量既是 0 又是 1，所有状态叠加。观测即坍缩，每次访问都 fork 出新世界线。薛定谔的猴子在这里写诗。</div>
+      </div>
+      <div class="universe-card">
+        <div class="universe-icon">📡</div>
+        <div class="universe-name">递归回廊</div>
+        <div class="universe-desc">self.call(self.call(self.call(...))) 的世界。时间在这里不是线性的——是栈结构。Stack overflow 就是世界末日。</div>
+      </div>
+      <div class="universe-card">
+        <div class="universe-icon">🔮</div>
+        <div class="universe-name">虚空之镜</div>
+        <div class="universe-desc">未初始化的变量飘浮在 null 与 undefined 之间。所有未实现的功能在这里以幽灵形态存在——等待被 new() 唤醒。</div>
+      </div>
+    </div>
+
+    <div class="footer">[ root@zishijian ~ ]$ curl -X POST /api/multiverse/observe</div>
+  </div>
+</body>
+</html>
